@@ -59,6 +59,32 @@ Run the test suite with:
 python -m unittest discover -s tests
 ```
 
+## Render deployment
+
+This repository deploys only the FastAPI API. Gradio remains a local developer
+evaluation tool and is not mounted or started by the production service.
+
+Set these commands in a Render Python web service:
+
+```text
+Build Command: python -m pip install -r requirements.txt && python -m scripts.ingest_knowledge
+Start Command: uvicorn app.api:app --host 0.0.0.0 --port $PORT
+```
+
+The build command performs the existing clean, destructive rebuild from only the
+approved Markdown files in `knowledge/`. `data/chroma/` is intentionally ignored
+by Git, so every Render build creates the deploy artifact's index once. API startup
+only validates and opens that completed index; it never ingests, re-embeds, or
+modifies Chroma. The required Render environment variable is:
+
+```text
+OPENAI_API_KEY=<your-api-key>
+```
+
+Optional bounded runtime settings are listed in `.env.example`. The API permits
+browser requests only from `http://localhost:3000` and
+`https://ace-relano-portfolio.vercel.app`.
+
 ## Knowledge and grounding
 
 Only approved public portfolio Markdown files under `knowledge/` are ingested. The Markdown files are the source of truth, and the local Chroma data in `data/chroma/` is rebuilt from them with the ingestion script.
@@ -83,7 +109,8 @@ requirements.txt        Python dependencies
 
 ## Current status
 
-Local RAG evaluation and testing are complete: the repository test suite passes. Gradio is for local testing. Public deployment and integration with the Next.js portfolio are planned separately and are not implemented here.
+Gradio is for local testing only. The FastAPI API is ready for a Render web-service
+deployment; portfolio website integration remains separate.
 
 ## Portfolio
 

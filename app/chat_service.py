@@ -198,6 +198,7 @@ class ChatSettings:
     candidate_limit: int = 10
     retrieval_limit: int = 4
     history_limit: int = 4  # User/assistant turns, not individual messages.
+    request_timeout_seconds: float = 20.0
 
     @classmethod
     def from_environment(cls) -> "ChatSettings":
@@ -218,6 +219,10 @@ class ChatSettings:
             ),
             retrieval_limit=_bounded_int(
                 os.getenv("PORTFOLIO_RAG_RETRIEVAL_LIMIT"), cls.retrieval_limit, 1, 4
+            ),
+            request_timeout_seconds=_bounded_seconds(
+                os.getenv("PORTFOLIO_RAG_REQUEST_TIMEOUT_SECONDS"),
+                cls.request_timeout_seconds,
             ),
         )
 
@@ -402,7 +407,9 @@ class ChatService:
         self._retriever = retriever
         self._settings = settings or ChatSettings.from_environment()
         self._api_key = api_key if api_key is not None else os.getenv("OPENAI_API_KEY")
-        self._client_factory = client_factory or _openai_client
+        self._client_factory = client_factory or (
+            lambda: _openai_client(self._settings.request_timeout_seconds)
+        )
         self._public_facts = public_facts or load_public_facts(
             Path(__file__).resolve().parents[1]
         )
@@ -641,10 +648,10 @@ class ChatService:
             self._route_observer(route)
 
 
-def _openai_client() -> Any:
+def _openai_client(timeout_seconds: float = 20.0) -> Any:
     from openai import OpenAI
 
-    return OpenAI()
+    return OpenAI(timeout=timeout_seconds, max_retries=0)
 
 
 def _bounded_float(value: str | None, default: float) -> float:
@@ -653,6 +660,16 @@ def _bounded_float(value: str | None, default: float) -> float:
     except ValueError:
         return default
     return min(1.0, max(0.0, parsed))
+
+
+def _bounded_seconds(value: str | None, default: float) -> float:
+    try:
+        parsed = float(value) if value is not None else default
+    except ValueError:
+        return default
+    if not math.isfinite(parsed):
+        return default
+    return min(60.0, max(5.0, parsed))
 
 
 def _bounded_int(value: str | None, default: int, minimum: int, maximum: int) -> int:
