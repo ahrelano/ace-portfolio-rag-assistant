@@ -1,0 +1,65 @@
+{
+  "general_threshold": 0.75,
+  "targeted_threshold": 0.7,
+  "relevant": [
+    {
+      "question": "What are Ace's skills?",
+      "section": "capabilities",
+      "raw_distance": 0.454504,
+      "relevance": 0.772748
+    },
+    {
+      "question": "Can he help me edit a photo?",
+      "section": "experience",
+      "raw_distance": 0.576381,
+      "relevance": 0.711809
+    },
+    {
+      "question": "Does he have knowledge of graphic design?",
+      "section": "experience",
+      "raw_distance": 0.531658,
+      "relevance": 0.734171
+    },
+    {
+      "question": "How does his background combine design and development?",
+      "section": "experience",
+      "raw_distance": 0.587638,
+      "relevance": 0.706181
+    },
+    {
+      "question": "Describe Ace's ERP experience.",
+      "section": "capabilities",
+      "raw_distance": 0.284253,
+      "relevance": 0.857873
+    },
+    {
+      "question": "Describe Ace's ERP experience.",
+      "section": "projects",
+      "raw_distance": 0.352305,
+      "relevance": 0.823848
+    },
+    {
+      "question": "What projects best demonstrate his skills?",
+      "section": "projects",
+      "raw_distance": 0.506483,
+      "relevance": 0.746759
+    }
+  ],
+  "irrelevant": [
+    {
+      "question": "What is the capital of France?",
+      "raw_distance": 0.637242,
+      "relevance": 0.681379
+    },
+    {
+      "question": "What is the weather today?",
+      "raw_distance": 0.554367,
+      "relevance": 0.722816
+    },
+    {
+      "question": "Give me a recipe for pancakes.",
+      "raw_distance": 0.584528,
+      "relevance": 0.707736
+    }
+  ]
+}

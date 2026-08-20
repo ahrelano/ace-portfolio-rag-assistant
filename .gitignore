@@ -1,0 +1,20 @@
+.env
+.env.*
+!.env.example
+
+# Generated local vector store
+data/chroma/
+
+# Python runtime and local test artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.venv/
+venv/
+
+# Local logs
+logs/
+*.log

@@ -1,0 +1,7 @@
+langchain>=1.0,<2.0
+langchain-chroma>=1.0,<2.0
+langchain-openai>=1.0,<2.0
+langchain-text-splitters>=1.0,<2.0
+python-dotenv>=1.0,<2.0
+gradio>=5.0,<6.0
+openai>=1.0,<2.0
